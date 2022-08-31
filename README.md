@@ -1,1 +1,1 @@
-# pathshala {Coaching Center Management System in PHP}
+# Pathshala-(Coaching Center Management System in PHP)
