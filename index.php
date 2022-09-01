@@ -1,4 +1,5 @@
 <?php 
+require 'db/dbcon.php';
   session_start();
 
   if (isset($_SESSION['user_id']) && isset($_SESSION['user_username'])) { 
@@ -87,7 +88,17 @@
                             <div class="col-xl-4 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
                                     <div class="card-body">Total Student </div>
-                                    <div class="card-body">150</div>
+									<?php							
+										$query = "SELECT * FROM students";
+										$query_run = mysqli_query($con, $query);
+
+										if($total_student = mysqli_num_rows($query_run))
+										{
+											echo'<div class="card-body">'.$total_student.'</div>';
+										} else{
+											echo'<div class="card-body">0</div>';
+										}
+									?>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="students.php">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -97,7 +108,17 @@
                             <div class="col-xl-4 col-md-6">
                                 <div class="card bg-warning text-white mb-4">
                                     <div class="card-body">Total Supervisor</div>
-									<div class="card-body">15</div>
+									<?php							
+										$query = "SELECT * FROM supervisor";
+										$query_run = mysqli_query($con, $query);
+
+										if($total_supervisor = mysqli_num_rows($query_run))
+										{
+											echo'<div class="card-body">'.$total_supervisor.'</div>';
+										} else{
+											echo'<div class="card-body">0</div>';
+										}
+									?>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="supervisor.php">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -107,7 +128,17 @@
                             <div class="col-xl-4 col-md-6">
                                 <div class="card bg-success text-white mb-4">
                                     <div class="card-body">Total Staff</div>
-									<div class="card-body">10</div>
+									<?php							
+										$query = "SELECT * FROM staff";
+										$query_run = mysqli_query($con, $query);
+
+										if($total_staff = mysqli_num_rows($query_run))
+										{
+											echo'<div class="card-body">'.$total_staff.'</div>';
+										} else{
+											echo'<div class="card-body">0</div>';
+										}
+									?>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="staff.php">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -118,7 +149,15 @@
                                 <div class="card bg-secondary text-white mb-4">
                                     <div class="card-body">Total Payment</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        $35687
+									<?php							
+										$query = "SELECT SUM(total_payment) FROM students";
+										$query_run = mysqli_query($con, $query);
+
+										while($total_payment = mysqli_fetch_array($query_run))
+										{
+										 echo '$'.$total_payment['SUM(total_payment)'];
+										}
+									?>
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +165,15 @@
                                 <div class="card bg-info text-white mb-4">
                                     <div class="card-body">Total Paid Amount</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        $468765
+									<?php							
+										$query = "SELECT SUM(paid_amount) FROM students";
+										$query_run = mysqli_query($con, $query);
+
+										while($paid_amount = mysqli_fetch_array($query_run))
+										{
+										 echo '$'.$paid_amount['SUM(paid_amount)'];
+										}
+									?>
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +181,15 @@
                                 <div class="card bg-danger text-white mb-4">
                                     <div class="card-body">Total Due</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        $46800
+                                    <?php							
+										$query = "SELECT SUM(due_payment) FROM students";
+										$query_run = mysqli_query($con, $query);
+
+										while($due_payment = mysqli_fetch_array($query_run))
+										{
+										 echo '$'.$due_payment['SUM(due_payment)'];
+										}
+									?>
                                     </div>
                                 </div>
                             </div>
