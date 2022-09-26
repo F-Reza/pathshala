@@ -11703,3 +11703,43 @@ body {
 .about {
 	color: #fff;
 }
+
+
+
+.formContainer {
+    max-width:320px;
+    box-shadow : 4px 8px 16px #d7d7d7;
+    margin:0 auto;
+    padding:20px;
+    border-radius:0px 0px 4px 4px;
+  }
+  input {
+    box-shadow:none !important;
+    outline:none;
+  }
+  #btnHolder {
+    margin:0px -20px -20px -20px;
+  }
+  #btnHolder .btn {
+    border-radius:0px 0px 4px 4px !important;
+    height:60px;
+  }
+  @media screen and (max-width:766px){
+    .centerOnMobile {
+      margin : 20vh auto
+    }
+  }
+  @media screen and (min-width:767px){
+    #mainBgn {
+      background : url('../bg.jpg') no-repeat;
+      background-size:cover;
+      background-position:center;
+      height:90vh;
+      width:100%;
+    }
+    #mainContainer {
+      box-shadow : 2px 4px 12px rgba(0,0,0,0.4);
+      height:90vh;
+      margin: 5vh 20px;
+    }
+  }

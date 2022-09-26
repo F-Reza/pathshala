@@ -41,6 +41,20 @@
                     <label for="">Designation</label>
                     <input type="text" name="designation" required class="form-control" />
                 </div>
+                <div class="mb-3">
+                    <label for="">Salary</label>
+                    <input type="text" name="salary" required class="form-control" />
+                </div>
+				
+				<div class="mb-3">
+                    <label for="">Username (Unique)</label>
+                    <input type="text" name="user_name" required class="form-control" />
+                </div>
+				<div class="mb-3">
+                    <label for="">Password</label>
+                    <input type="password" name="password" required class="form-control" />
+                </div>
+				
 			</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -73,6 +87,10 @@
                 <div class="mb-3">
                     <label for="">Designation</label>
                     <input type="text" name="designation" id="designation" required class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="">Salary</label>
+                    <input type="text" name="salary" id="salary" required class="form-control" />
                 </div>			
             </div>
             <div class="modal-footer">
@@ -103,6 +121,10 @@
                 <div class="mb-3">
                     <label for="">Designation</label>
                     <p id="view_designation" class="form-control"></p>
+                </div>
+                <div class="mb-3">
+                    <label for="">Salary</label>
+                    <p id="view_salary" class="form-control"></p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -139,9 +161,11 @@
                     <table id="myTable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>No.</th>
                                 <th>Name</th>
                                 <th>Designation</th>
+                                <th>Salary</th>
+								<th>Username</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -154,13 +178,16 @@
 
                             if(mysqli_num_rows($query_run) > 0)
                             {
+                                $i = 1;
                                 foreach($query_run as $staff)
                                 {
                                     ?>
                                     <tr>
-                                        <td><?= $staff['id'] ?></td>
+                                        <td><?= $i ?></td>
                                         <td><?= $staff['name'] ?></td>
                                         <td><?= $staff['designation'] ?></td>
+                                        <td><?= $staff['salary'] ?></td>
+										<td><?= $staff['user_name'] ?></td>
                                         <td>
                                             <button type="button" value="<?=$staff['id'];?>" class="viewStaffBtn btn btn-info btn-sm">View</button>
                                             <button type="button" value="<?=$staff['id'];?>" class="editStaffBtn btn btn-success btn-sm">Edit</button>
@@ -168,6 +195,7 @@
                                         </td>
                                     </tr>
                                     <?php
+                                    $i++;
                                 }
                             }
                             ?>
@@ -243,6 +271,7 @@
                         $('#staff_id').val(res.data.id);
                         $('#name').val(res.data.name);
                         $('#designation').val(res.data.designation);
+                        $('#salary').val(res.data.salary);
 						
                         $('#staffEditModal').modal('show');
                     }
@@ -307,6 +336,7 @@
 
                         $('#view_name').text(res.data.name);
                         $('#view_designation').text(res.data.designation);
+                        $('#view_salary').text(res.data.salary);
 
                         $('#staffViewModal').modal('show');
                     }

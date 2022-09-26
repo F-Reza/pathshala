@@ -7,15 +7,16 @@ require 'db/dbcon.php';
 if(isset($_POST['save_student']))
 {
     $name = mysqli_real_escape_string($con, $_POST['name']);
+    $address = mysqli_real_escape_string($con, $_POST['address']);
     $phone = mysqli_real_escape_string($con, $_POST['phone']);
     $course = mysqli_real_escape_string($con, $_POST['course']);
+    $section = mysqli_real_escape_string($con, $_POST['section']);
     $total_payment = mysqli_real_escape_string($con, $_POST['total_payment']);
-    $paid_amount = mysqli_real_escape_string($con, $_POST['paid_amount']);
-    $due_payment = mysqli_real_escape_string($con, $_POST['total_payment']) - 
-	mysqli_real_escape_string($con, $_POST['paid_amount']);
-    //$due_payment = total_payment - paid_amount;
+	$user_name = mysqli_real_escape_string($con, $_POST['user_name']);
+	$password = mysqli_real_escape_string($con, $_POST['password']);
 
-    if($name == NULL || $phone == NULL || $course == NULL || $total_payment == NULL || $paid_amount == NULL)
+
+    if($name == NULL || $address == NULL || $phone == NULL || $course == NULL || $section == NULL || $total_payment == NULL || $user_name == NULL || $password == NULL)
     {
         $res = [
             'status' => 422,
@@ -24,11 +25,33 @@ if(isset($_POST['save_student']))
         echo json_encode($res);
         return;
     }
+$query1 = "SELECT COUNT(course) FROM students WHERE course='$course';";
+$query2 = "SELECT COUNT(section) FROM students WHERE section='$section';";
 
-    $query = "INSERT INTO students (name,phone,course,total_payment,paid_amount,due_payment) VALUES ('$name','$phone','$course','$total_payment','$paid_amount','$due_payment')";
-    $query_run = mysqli_query($con, $query);
+$query_run1 = mysqli_query($con, $query1);
+$query_run2 = mysqli_query($con, $query2);
 
-    if($query_run)
+$c_limit=20;
+$s_limit=20;
+
+
+while($select1 = mysqli_fetch_array($query_run1))
+{while($select2 = mysqli_fetch_array($query_run2))
+{	
+	if($c_limit > $select1['COUNT(course)'] || $s_limit > $select2['COUNT(section)'])
+	{
+	mysqli_begin_transaction($con);
+    try{
+    $query = "INSERT INTO students (name,address,phone,course,section,total_payment,user_name) VALUES ('$name','$address','$phone','$course','$section','$total_payment','$user_name')";
+    $query_2 = "INSERT INTO user_std (user_name,password) VALUES ('$user_name','$password')";
+    
+	$query_run = mysqli_query($con, $query);
+    $query_run_2 = mysqli_query($con, $query_2);
+    
+    mysqli_commit($con);
+	
+	
+	 if($query_run && $query_run_2)
     {
         $res = [
             'status' => 200,
@@ -36,7 +59,7 @@ if(isset($_POST['save_student']))
         ];
         echo json_encode($res);
         return;
-    }
+    } 
     else
     {
         $res = [
@@ -46,7 +69,36 @@ if(isset($_POST['save_student']))
         echo json_encode($res);
         return;
     }
+
+    }
+
+    catch (mysqli_sql_exception $Error)
+    {
+        mysqli_rollback($con);
+        throw $Error;
+        echo"Error";
+
+    }
+		
+	}else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'Student Limit only 20'
+        ];
+        echo json_encode($res);
+        return;
+    }
+	
+}}
+
+  
+   
 }
+
+
+
+
 
 
 if(isset($_POST['update_student']))
@@ -54,14 +106,12 @@ if(isset($_POST['update_student']))
     $student_id = mysqli_real_escape_string($con, $_POST['student_id']);
 
     $name = mysqli_real_escape_string($con, $_POST['name']);
+    $address = mysqli_real_escape_string($con, $_POST['address']);
     $phone = mysqli_real_escape_string($con, $_POST['phone']);
-    $course = mysqli_real_escape_string($con, $_POST['course']);
+    //$course = mysqli_real_escape_string($con, $_POST['course']);
 	$total_payment = mysqli_real_escape_string($con, $_POST['total_payment']);
-    $paid_amount = mysqli_real_escape_string($con, $_POST['paid_amount']);
-    $due_payment = mysqli_real_escape_string($con, $_POST['total_payment']) - 
-	mysqli_real_escape_string($con, $_POST['paid_amount']);
 
-    if($name == NULL || $phone == NULL || $course == NULL || $total_payment == NULL || $paid_amount == NULL)
+    if($name == NULL || $address == NULL || $phone == NULL || $total_payment == NULL)
     {
         $res = [
             'status' => 422,
@@ -71,7 +121,7 @@ if(isset($_POST['update_student']))
         return;
     }
 
-    $query = "UPDATE students SET name='$name', phone='$phone', course='$course' , total_payment='$total_payment', paid_amount='$paid_amount', due_payment='$due_payment'
+    $query = "UPDATE students SET name='$name',address= '$address', phone='$phone', total_payment='$total_payment'
                 WHERE id='$student_id'";
     $query_run = mysqli_query($con, $query);
 
@@ -167,8 +217,11 @@ if(isset($_POST['save_Supervisor']))
     $qualification = mysqli_real_escape_string($con, $_POST['qualification']);
     $taking_course = mysqli_real_escape_string($con, $_POST['taking_course']);
     $salary = mysqli_real_escape_string($con, $_POST['salary']);
+	$user_name = mysqli_real_escape_string($con, $_POST['user_name']);
+	$password = mysqli_real_escape_string($con, $_POST['password']);
 
-    if($name == NULL || $qualification == NULL || $taking_course == NULL || $salary == NULL)
+
+    if($name == NULL || $qualification == NULL || $taking_course == NULL || $salary == NULL || $user_name == NULL || $password == NULL)
     {
         $res = [
             'status' => 422,
@@ -177,11 +230,20 @@ if(isset($_POST['save_Supervisor']))
         echo json_encode($res);
         return;
     }
+	
+	mysqli_begin_transaction($con);
+    try{
 
-    $query = "INSERT INTO supervisor (name,qualification,taking_course,salary) VALUES ('$name','$qualification','$taking_course','$salary')";
-    $query_run = mysqli_query($con, $query);
-
-    if($query_run)
+    $query = "INSERT INTO supervisor (name,qualification,taking_course,salary,user_name) VALUES ('$name','$qualification','$taking_course','$salary','$user_name')";
+    $query2 = "INSERT INTO user_spv (user_name,password) VALUES ('$user_name','$password')";
+    
+	$query_run = mysqli_query($con, $query);
+    $query_run2 = mysqli_query($con, $query2);
+    
+    mysqli_commit($con);
+	
+	
+	 if($query_run && $query_run2)
     {
         $res = [
             'status' => 200,
@@ -189,7 +251,7 @@ if(isset($_POST['save_Supervisor']))
         ];
         echo json_encode($res);
         return;
-    }
+    } 
     else
     {
         $res = [
@@ -198,6 +260,16 @@ if(isset($_POST['save_Supervisor']))
         ];
         echo json_encode($res);
         return;
+    }
+
+    }
+
+    catch (mysqli_sql_exception $Error)
+    {
+        mysqli_rollback($con);
+        throw $Error;
+        echo"Error";
+
     }
 }
 
@@ -312,8 +384,12 @@ if(isset($_POST['save_staff']))
 {
     $name = mysqli_real_escape_string($con, $_POST['name']);
     $designation = mysqli_real_escape_string($con, $_POST['designation']);
+    $salary = mysqli_real_escape_string($con, $_POST['salary']);
+	$user_name = mysqli_real_escape_string($con, $_POST['user_name']);
+	$password = mysqli_real_escape_string($con, $_POST['password']);
 
-    if($name == NULL || $designation == NULL)
+
+    if($name == NULL || $designation == NULL || $salary == NULL || $user_name == NULL || $password == NULL)
     {
         $res = [
             'status' => 422,
@@ -322,11 +398,20 @@ if(isset($_POST['save_staff']))
         echo json_encode($res);
         return;
     }
+	
+	mysqli_begin_transaction($con);
+    try{
 
-    $query = "INSERT INTO staff (name,designation) VALUES ('$name','$designation')";
-    $query_run = mysqli_query($con, $query);
-
-    if($query_run)
+    $query = "INSERT INTO staff (name,designation,salary,user_name) VALUES ('$name','$designation','$salary','$user_name')";
+    $query2 = "INSERT INTO user_stf (user_name,password) VALUES ('$user_name','$password')";
+    
+	$query_run = mysqli_query($con, $query);
+    $query_run2 = mysqli_query($con, $query2);
+    
+    mysqli_commit($con);
+	
+	
+	 if($query_run && $query_run2)
     {
         $res = [
             'status' => 200,
@@ -334,7 +419,7 @@ if(isset($_POST['save_staff']))
         ];
         echo json_encode($res);
         return;
-    }
+    } 
     else
     {
         $res = [
@@ -344,6 +429,18 @@ if(isset($_POST['save_staff']))
         echo json_encode($res);
         return;
     }
+
+    }
+
+    catch (mysqli_sql_exception $Error)
+    {
+        mysqli_rollback($con);
+        throw $Error;
+        echo"Error";
+
+    }
+
+    
 }
 
 
@@ -353,8 +450,9 @@ if(isset($_POST['update_staff']))
 
     $name = mysqli_real_escape_string($con, $_POST['name']);
     $designation = mysqli_real_escape_string($con, $_POST['designation']);
+    $salary = mysqli_real_escape_string($con, $_POST['salary']);
 
-    if($name == NULL || $designation == NULL)
+    if($name == NULL || $designation == NULL || $salary == NULL)
     {
         $res = [
             'status' => 422,
@@ -364,7 +462,7 @@ if(isset($_POST['update_staff']))
         return;
     }
 
-    $query = "UPDATE staff SET name='$name', designation='$designation'
+    $query = "UPDATE staff SET name='$name', designation='$designation', salary = '$salary'
                 WHERE id='$staff_id'";
     $query_run = mysqli_query($con, $query);
 
@@ -445,6 +543,153 @@ if(isset($_POST['delete_staff']))
         return;
     }
 }
+
+
+
+//==================payment===================================>
+if(isset($_POST['save_payment']))
+{
+    $s_id = mysqli_real_escape_string($con, $_POST['s_id']);
+    $amount = mysqli_real_escape_string($con, $_POST['amount']);
+
+    if($s_id == NULL || $amount == NULL)
+    {
+        $res = [
+            'status' => 422,
+            'message' => 'All fields are mandatory'
+        ];
+        echo json_encode($res);
+        return;
+    }
+
+    $query = "INSERT INTO payment (s_id,amount) VALUES ('$s_id','$amount')";
+    $query_run = mysqli_query($con, $query);
+
+    if($query_run)
+    {
+        $res = [
+            'status' => 200,
+            'message' => 'payment Created Successfully'
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'payment Not Created'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
+
+
+if(isset($_POST['update_payment']))
+{	
+    $id = mysqli_real_escape_string($con, $_POST['id']);
+
+    $amount = mysqli_real_escape_string($con, $_POST['amount']);
+
+    if($amount == NULL)
+    {
+        $res = [
+            'status' => 422,
+            'message' => 'All fields are mandatory'
+        ];
+        echo json_encode($res);
+        return;
+    }
+	
+    $query = "UPDATE payment SET amount='$amount'
+                WHERE id='$id'";
+    $query_run = mysqli_query($con, $query);
+
+    if($query_run)
+    {
+        $res = [
+            'status' => 200,
+            'message' => 'Payment Updated Successfully'
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'Payment Not Updated'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
+
+
+
+
+if(isset($_GET['id']))
+{
+    $id = mysqli_real_escape_string($con, $_GET['id']);
+
+    $query = "SELECT * FROM payment WHERE id='$id'";
+    $query_run = mysqli_query($con, $query);
+
+    if(mysqli_num_rows($query_run) == 1)
+    {
+        $payment = mysqli_fetch_array($query_run);
+
+        $res = [
+            'status' => 200,
+            'message' => 'payment Fetch Successfully by id',
+            'data' => $payment
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 404,
+            'message' => 'payment Id Not Found'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
+
+if(isset($_POST['delete_payment']))
+{
+    $id = mysqli_real_escape_string($con, $_POST['id']);
+
+    $query = "DELETE FROM payment WHERE id='$id'";
+    $query_run = mysqli_query($con, $query);
+
+    if($query_run)
+    {
+        $res = [
+            'status' => 200,
+            'message' => 'payment Deleted Successfully'
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'payment Not Deleted'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
+
+
+
+
+
 
 
 

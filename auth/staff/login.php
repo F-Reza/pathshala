@@ -1,10 +1,6 @@
 <?php 
-//Onetime Password
-//$hashed_password = password_hash('admin', PASSWORD_DEFAULT);
-//echo $hashed_password;
-
   session_start();
-  if (!isset($_SESSION['id']) && !isset($_SESSION['username'])) { 
+  if (!isset($_SESSION['std_user_name'])) { 
 ?>
 
 <!DOCTYPE html>
@@ -21,8 +17,8 @@
 	  	      action="auth.php"
 	  	      method="post" 
 	  	      style="width: 30rem">
-			<a href="welcome.php" class="btn btn-success float-center">START</a> 
-	  		<h1 class="text-center pb-3 display-6">Admin</h1>
+			<a href="../../welcome.php" class="btn btn-success float-center">START</a> 
+	  		<h1 class="text-center pb-3 display-6">Staff</h1>
 	  		<h1 class="text-center pb-5 display-4">LOGIN</h1>
 	  		<?php if (isset($_GET['error'])) { ?>
 	  		<div class="alert alert-danger" role="alert">
@@ -31,11 +27,11 @@
 		    <?php } ?>
 		  <div class="mb-3">
 		    <label for="exampleInputUsername" 
-		           class="form-label">Username
+		           class="form-label">UserName
 		    </label>
 		    <input type="text" 
-		           name="username" 
-		           value="<?php if(isset($_GET['username']))echo(htmlspecialchars($_GET['username'])) ?>" 
+		           name="user_name" 
+		           value="<?php if(isset($_GET['user_name']))echo(htmlspecialchars($_GET['user_name'])) ?>" 
 		           class="form-control" 
 		           id="exampleInputUsername" aria-describedby="usernamelHelp">
 		  </div>

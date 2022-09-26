@@ -67,6 +67,14 @@ require 'db/dbcon.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Staff
                             </a>
+                            <a class="nav-link" href="payment.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Collect Fee
+                            </a>
+							<a class="nav-link" href="revenue.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Revenue MS
+                            </a>
                             <a class="nav-link" href="about.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 About Us
@@ -126,7 +134,7 @@ require 'db/dbcon.php';
                                 </div>
                             </div>
                             <div class="col-xl-4 col-md-6">
-                                <div class="card bg-success text-white mb-4">
+                                <div class="card bg-secondary text-white mb-4">
                                     <div class="card-body">Total Staff</div>
 									<?php							
 										$query = "SELECT * FROM staff";
@@ -145,55 +153,26 @@ require 'db/dbcon.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4 col-md-6">
-                                <div class="card bg-secondary text-white mb-4">
-                                    <div class="card-body">Total Payment</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-									<?php							
-										$query = "SELECT SUM(total_payment) FROM students";
-										$query_run = mysqli_query($con, $query);
+                            <div class="col-xl-6 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">Revenue Management</div>
 
-										while($total_payment = mysqli_fetch_array($query_run))
-										{
-										 echo '$'.$total_payment['SUM(total_payment)'];
-										}
-									?>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="revenue.php">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
-							<div class="col-xl-4 col-md-6">
-                                <div class="card bg-info text-white mb-4">
-                                    <div class="card-body">Total Paid Amount</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-									<?php							
-										$query = "SELECT SUM(paid_amount) FROM students";
-										$query_run = mysqli_query($con, $query);
+							<div class="col-xl-6 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">Collect Fee</div>
 
-										while($paid_amount = mysqli_fetch_array($query_run))
-										{
-										 echo '$'.$paid_amount['SUM(paid_amount)'];
-										}
-									?>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="payment.php">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
-							<div class="col-xl-4 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Total Due</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <?php							
-										$query = "SELECT SUM(due_payment) FROM students";
-										$query_run = mysqli_query($con, $query);
-
-										while($due_payment = mysqli_fetch_array($query_run))
-										{
-										 echo '$'.$due_payment['SUM(due_payment)'];
-										}
-									?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="card mb-4">

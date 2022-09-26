@@ -38,23 +38,43 @@
                     <input type="text" name="name" required class="form-control" />
                 </div>
                 <div class="mb-3">
+                    <label for="">Address</label>
+                    <input type="text" name="address" required class="form-control" />
+                </div>
+                <div class="mb-3">
                     <label for="">Phone</label>
                     <input type="text" name="phone" required class="form-control" />
                 </div>
                 <div class="mb-3">
-                    <label for="">Course</label>
-                    <input type="text" name="course" required class="form-control" />
+                    <label for="">Select Course</label>
+                    <select name = "course">
+                    <option value="" selected >None</option>
+                    <option value="Course-A">Course-A</option>
+                    <option value="Course-B">Course-B</option>
+                    </select>    
                 </div>
-				
-				
 				<div class="mb-3">
-                    <label for="">Total Paymen</label>
+                    <label for="">Select Section</label>
+                    <select name = "section">
+                    <option value="" selected >None</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    </select>	
+                </div>
+				<div class="mb-3">
+                    <label for="">Total Payable</label>
                     <input type="text" name="total_payment" required class="form-control" />
                 </div>
+				
 				<div class="mb-3">
-                    <label for="">Paid Amount</label>
-                    <input type="text" name="paid_amount" required class="form-control" />
+                    <label for="">Username (Unique)</label>
+                    <input type="text" name="user_name" required class="form-control" />
                 </div>
+				<div class="mb-3">
+                    <label for="">Password</label>
+                    <input type="password" name="password" required class="form-control" />
+                </div>
+
 				
             </div>
             <div class="modal-footer">
@@ -86,21 +106,32 @@
                     <input type="text" name="name" id="name" required class="form-control" />
                 </div>
                 <div class="mb-3">
+                    <label for="">Address</label>
+                    <input type="text" name="address" id="address" required class="form-control" />
+                </div>
+                <div class="mb-3">
                     <label for="">Phone</label>
                     <input type="text" name="phone" id="phone" required class="form-control" />
                 </div>
+				<!--
                 <div class="mb-3">
-                    <label for="">Course</label>
-                    <input type="text" name="course" id="course" required class="form-control" />
+					<label for="">Select Course</label> 
+					<select name = "course">
+						<option value="Course-A">Course-A</option>
+						<option value="Course-B">Course-B</option>
+                    </select>
                 </div>
-				
 				<div class="mb-3">
-                    <label for="">Total Paymen</label>
+                    <label for="">Select Section</label> 
+					<select name = "section">
+						<option value="A">A</option>
+						<option value="B">B</option>
+                    </select>
+                </div>
+				-->
+				<div class="mb-3">
+                    <label for="">Total Payable</label>
                     <input type="text" name="total_payment" id="total_payment" required class="form-control" />
-                </div>
-				<div class="mb-3">
-                    <label for="">Paid Amount</label>
-                    <input type="text" name="paid_amount" id="paid_amount" required class="form-control" />
                 </div>
 				
             </div>
@@ -131,6 +162,10 @@
                     <p id="view_name" class="form-control"></p>
                 </div>
                 <div class="mb-3">
+                    <label for="">Address</label>
+                    <p id="view_address" class="form-control"></p>
+                </div>
+                <div class="mb-3">
                     <label for="">Phone</label>
                     <p id="view_phone" class="form-control"></p>
                 </div>
@@ -138,21 +173,14 @@
                     <label for="">Course</label>
                     <p id="view_course" class="form-control"></p>
                 </div>
-				
 				<div class="mb-3">
-                    <label for="">Total Payment</label>
+                    <label for="">Section</label>
+                    <p id="view_section" class="form-control"></p>
+                </div>	
+				<div class="mb-3">
+                    <label for="">Total Payable</label>
 					<p id="view_total_payment" class="form-control"></p>
-                </div>
-				<div class="mb-3">
-                    <label for="">Paid Amount</label>
-					<p id="view_paid_amount" class="form-control"></p> 
-                </div>
-				<div class="mb-3">
-                    <label for="">Due</label>
-					<p id="view_due_payment" class="form-control"></p> 
-                </div>
-				
-				
+                </div>						
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -188,11 +216,15 @@
                     <table id="myTable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
+                                <th>No.</th>
                                 <th>ID</th>
                                 <th>Name</th>
+                                <th>Address</th>
                                 <th>Phone</th>
                                 <th>Course</th>
-                                <th>Total Payment</th>
+                                <th>Section</th>
+								<th>Username</th>
+                                <th>Total Payable</th>
                                 <th>Paid Amount</th>
 								<th>Due</th>
                                 <th>Action</th>
@@ -205,27 +237,92 @@
                             $query = "SELECT * FROM students";
                             $query_run = mysqli_query($con, $query);
 
+                            
                             if(mysqli_num_rows($query_run) > 0)
                             {
+                                $i = 1;
+                                
                                 foreach($query_run as $student)
+                                
                                 {
                                     ?>
                                     <tr>
+                                        <td><?= $i ?></td>
                                         <td><?= $student['id'] ?></td>
                                         <td><?= $student['name'] ?></td>
+                                        <td><?= $student['address'] ?></td>
                                         <td><?= $student['phone'] ?></td>
                                         <td><?= $student['course'] ?></td>
+                                        <td><?= $student['section'] ?></td>
+										<td><?= $student['user_name'] ?></td>
                                         <td><?= $student['total_payment'] ?></td>
-                                        <td><?= $student['paid_amount'] ?></td>
-                                        <td><?= $student['due_payment'] ?></td>
+
                                         <td>
+                                        <?php
+                                        $sid =  $student['id'] ;
+										$query = "SELECT SUM(amount) FROM payment
+                                        where s_id =  $sid";
+										$query_run = mysqli_query($con, $query);
+
+										while($amount = mysqli_fetch_array($query_run))
+										{
+                                            if($amount['SUM(amount)'] <= 0)
+                                            {
+                                                echo "$0.0";
+                                            }
+                                            else
+                                            {
+                                                echo '$'.$amount['SUM(amount)'];
+                                            }		
+										}
+									    ?>    
+                                        </td>
+
+                                        <td>
+                                        <?php
+                                        $sid =  $student['id'] ;
+										$query = "SELECT SUM(total_payment) FROM students
+                                        where id =  $sid";
+										$query_run = mysqli_query($con, $query);
+
+										while($total_payment = mysqli_fetch_array($query_run))
+										{
+										 
+                                         $calculate = $total_payment['SUM(total_payment)'];
+
+                                         $query = "SELECT SUM(amount) FROM payment
+                                         where s_id =  $sid";
+                                         $query_run = mysqli_query($con, $query);
+ 
+                                         while($amount = mysqli_fetch_array($query_run))
+                                         {
+                                          $payable = $amount['SUM(amount)'];
+                                          $totalsum = $calculate - $payable;
+										  
+										  if($totalsum >0) {
+											  echo '$'.$totalsum;
+										  }else{
+											  echo '$'.$totalsum.' B';
+										  }
+                                         }
+										}
+									    ?>
+                                        </td>
+                                        
+                                        
+                                        <td>
+                                        
                                             <button type="button" value="<?=$student['id'];?>" class="viewStudentBtn btn btn-info btn-sm">View</button>
                                             <button type="button" value="<?=$student['id'];?>" class="editStudentBtn btn btn-success btn-sm">Edit</button>
                                             <button type="button" value="<?=$student['id'];?>" class="deleteStudentBtn btn btn-danger btn-sm">Delete</button>
                                         </td>
+                                       
                                     </tr>
+                                    
                                     <?php
+                                    $i++;
                                 }
+                                
                             }
                             ?>
                             
@@ -299,11 +396,11 @@
 
                         $('#student_id').val(res.data.id);
                         $('#name').val(res.data.name);
+                        $('#address').val(res.data.address);
                         $('#phone').val(res.data.phone);
-                        $('#course').val(res.data.course);
+                        //$('#course').val(res.data.course);
+                        //$('#section').val(res.data.section);
                         $('#total_payment').val(res.data.total_payment);
-                        $('#paid_amount').val(res.data.paid_amount);
-                        //$('#due_payment').val(res.data.due_payment);
 
                         $('#studentEditModal').modal('show');
                     }
@@ -367,11 +464,11 @@
                     }else if(res.status == 200){
 
                         $('#view_name').text(res.data.name);
+                        $('#view_address').text(res.data.address);
                         $('#view_phone').text(res.data.phone);
                         $('#view_course').text(res.data.course);
+                        $('#view_section').text(res.data.section);
                         $('#view_total_payment').text(res.data.total_payment);
-                        $('#view_paid_amount').text(res.data.paid_amount);
-                        $('#view_due_payment').text(res.data.due_payment);
 
                         $('#studentViewModal').modal('show');
                     }
