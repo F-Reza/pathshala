@@ -28,17 +28,19 @@ if(isset($_POST['save_student']))
 $query1 = "SELECT COUNT(course) FROM students WHERE course='$course';";
 $query2 = "SELECT COUNT(section) FROM students WHERE section='$section';";
 
+$query3 = "SELECT limits FROM course WHERE course_title='$course';";
+
 $query_run1 = mysqli_query($con, $query1);
 $query_run2 = mysqli_query($con, $query2);
-
-$c_limit=20;
-$s_limit=20;
-
+$query_run3 = mysqli_query($con, $query3);
 
 while($select1 = mysqli_fetch_array($query_run1))
 {while($select2 = mysqli_fetch_array($query_run2))
+{while($limit = mysqli_fetch_array($query_run3))
 {	
-	if($c_limit > $select1['COUNT(course)'] || $s_limit > $select2['COUNT(section)'])
+	$limits = $limit['limits'];
+	
+	if($limits > $select1['COUNT(course)'] || $limits > $select2['COUNT(section)'])
 	{
 	mysqli_begin_transaction($con);
     try{
@@ -84,12 +86,12 @@ while($select1 = mysqli_fetch_array($query_run1))
     {
         $res = [
             'status' => 500,
-            'message' => 'Student Limit only 20'
+            'message' => 'Student Limit Out'
         ];
         echo json_encode($res);
         return;
     }
-	
+}	
 }}
 
   
@@ -109,6 +111,7 @@ if(isset($_POST['update_student']))
     $address = mysqli_real_escape_string($con, $_POST['address']);
     $phone = mysqli_real_escape_string($con, $_POST['phone']);
     //$course = mysqli_real_escape_string($con, $_POST['course']);
+    //$section = mysqli_real_escape_string($con, $_POST['section']);
 	$total_payment = mysqli_real_escape_string($con, $_POST['total_payment']);
 
     if($name == NULL || $address == NULL || $phone == NULL || $total_payment == NULL)
@@ -689,8 +692,331 @@ if(isset($_POST['delete_payment']))
 
 
 
+//==================Others Cost===================================>
+if(isset($_POST['save_cost']))
+{
+    $title = mysqli_real_escape_string($con, $_POST['title']);
+    $amount = mysqli_real_escape_string($con, $_POST['amount']);
 
 
+    if($title == NULL || $amount == NULL)
+    {
+        $res = [
+            'status' => 422,
+            'message' => 'All fields are mandatory'
+        ];
+        echo json_encode($res);
+        return;
+    }
+	
+	mysqli_begin_transaction($con);
+    try{
+
+    $query = "INSERT INTO cost (title,amount) VALUES ('$title','$amount')";
+    
+	$query_run = mysqli_query($con, $query);
+    
+    mysqli_commit($con);
+	
+	
+	 if($query_run)
+    {
+        $res = [
+            'status' => 200,
+            'message' => 'Cost Created Successfully'
+        ];
+        echo json_encode($res);
+        return;
+    } 
+    else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'Cost Not Created'
+        ];
+        echo json_encode($res);
+        return;
+    }
+
+    }
+
+    catch (mysqli_sql_exception $Error)
+    {
+        mysqli_rollback($con);
+        throw $Error;
+        echo"Error";
+
+    }
+
+    
+}
+
+
+if(isset($_POST['update_cost']))
+{
+    $cost_id = mysqli_real_escape_string($con, $_POST['cost_id']);
+
+    $title = mysqli_real_escape_string($con, $_POST['title']);
+    $amount = mysqli_real_escape_string($con, $_POST['amount']);
+
+    if($title == NULL || $amount == NULL)
+    {
+        $res = [
+            'status' => 422,
+            'message' => 'All fields are mandatory'
+        ];
+        echo json_encode($res);
+        return;
+    }
+
+    $query = "UPDATE cost SET title='$title', amount='$amount'
+                WHERE cost_id='$cost_id'";
+    $query_run = mysqli_query($con, $query);
+
+    if($query_run)
+    {
+        $res = [
+            'status' => 200,
+            'message' => 'Cost Updated Successfully'
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'Cost Not Updated'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
+
+
+if(isset($_GET['cost_id']))
+{
+    $cost_id = mysqli_real_escape_string($con, $_GET['cost_id']);
+
+    $query = "SELECT * FROM cost WHERE cost_id='$cost_id'";
+    $query_run = mysqli_query($con, $query);
+
+    if(mysqli_num_rows($query_run) == 1)
+    {
+        $student = mysqli_fetch_array($query_run);
+
+        $res = [
+            'status' => 200,
+            'message' => 'Cost Fetch Successfully by id',
+            'data' => $student
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 404,
+            'message' => 'Cost Id Not Found'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
+
+if(isset($_POST['delete_cost']))
+{
+    $cost_id = mysqli_real_escape_string($con, $_POST['cost_id']);
+
+    $query = "DELETE FROM cost WHERE cost_id='$cost_id'";
+    $query_run = mysqli_query($con, $query);
+
+    if($query_run)
+    {
+        $res = [
+            'status' => 200,
+            'message' => 'Cost Deleted Successfully'
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'Cost Not Deleted'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
+
+
+
+
+
+//==================Course===================================>
+if(isset($_POST['save_course']))
+{
+    $course_title = mysqli_real_escape_string($con, $_POST['course_title']);
+    $course_teacher_day = mysqli_real_escape_string($con, $_POST['course_teacher_day']);
+    $course_teacher_evening = mysqli_real_escape_string($con, $_POST['course_teacher_evening']);
+    $limits = mysqli_real_escape_string($con, $_POST['limits']);
+
+
+    if($course_title == NULL || $course_teacher_day == NULL || $course_teacher_evening == NULL || $limits == NULL)
+    {
+        $res = [
+            'status' => 422,
+            'message' => 'All fields are mandatory'
+        ];
+        echo json_encode($res);
+        return;
+    }
+	
+	mysqli_begin_transaction($con);
+    try{
+
+    $query = "INSERT INTO course (course_title,course_teacher_day,course_teacher_evening,limits) VALUES ('$course_title','$course_teacher_day','$course_teacher_evening','$limits')";
+    
+	$query_run = mysqli_query($con, $query);
+    
+    mysqli_commit($con);
+	
+	
+	 if($query_run)
+    {
+        $res = [
+            'status' => 200,
+            'message' => 'Course Created Successfully'
+        ];
+        echo json_encode($res);
+        return;
+    } 
+    else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'Course Not Created'
+        ];
+        echo json_encode($res);
+        return;
+    }
+
+    }
+
+    catch (mysqli_sql_exception $Error)
+    {
+        mysqli_rollback($con);
+        throw $Error;
+        echo"Error";
+
+    }
+
+    
+}
+
+
+if(isset($_POST['update_course']))
+{
+    $c_id = mysqli_real_escape_string($con, $_POST['c_id']);
+
+    $course_title = mysqli_real_escape_string($con, $_POST['course_title']);
+    //$course_teacher_day = mysqli_real_escape_string($con, $_POST['course_teacher_day']);
+    //$course_teacher_evening = mysqli_real_escape_string($con, $_POST['course_teacher_evening']);
+    $limits = mysqli_real_escape_string($con, $_POST['limits']);
+
+    if($course_title == NULL || $limits == NULL)
+    {
+        $res = [
+            'status' => 422,
+            'message' => 'All fields are mandatory'
+        ];
+        echo json_encode($res);
+        return;
+    }
+
+    $query = "UPDATE course SET course_title='$course_title', limits='$limits'
+                WHERE c_id='$c_id'";
+    $query_run = mysqli_query($con, $query);
+
+    if($query_run)
+    {
+        $res = [
+            'status' => 200,
+            'message' => 'Course Updated Successfully'
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'Course Not Updated'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
+
+
+if(isset($_GET['c_id']))
+{
+    $c_id = mysqli_real_escape_string($con, $_GET['c_id']);
+
+    $query = "SELECT * FROM course WHERE c_id='$c_id'";
+    $query_run = mysqli_query($con, $query);
+
+    if(mysqli_num_rows($query_run) == 1)
+    {
+        $student = mysqli_fetch_array($query_run);
+
+        $res = [
+            'status' => 200,
+            'message' => 'Course Fetch Successfully by id',
+            'data' => $student
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 404,
+            'message' => 'Course Id Not Found'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
+
+if(isset($_POST['delete_course']))
+{
+    $c_id = mysqli_real_escape_string($con, $_POST['c_id']);
+
+    $query = "DELETE FROM course WHERE c_id='$c_id'";
+    $query_run = mysqli_query($con, $query);
+
+    if($query_run)
+    {
+        $res = [
+            'status' => 200,
+            'message' => 'Course Deleted Successfully'
+        ];
+        echo json_encode($res);
+        return;
+    }
+    else
+    {
+        $res = [
+            'status' => 500,
+            'message' => 'Course Not Deleted'
+        ];
+        echo json_encode($res);
+        return;
+    }
+}
 
 
 

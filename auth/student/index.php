@@ -84,13 +84,13 @@ require '../../db/dbcon.php';
 								<td><?= $user['phone'] ?></td>
 								<td><?= $user['course'] ?></td>
 								<?php
-								if($user['section'] == 'A'){
+								if($user['section'] == 'Day'){
 								?>
 								<td><?= $user['section'].' (10:00am-12:00pm)' ?></td>
 								<?php
 								}else{
 									?>
-								<td><?= $user['section'].' (04:00pm-06:00pm)' ?></td>
+								<td><?= $user['section'].' (06:00pm-08:00pm)' ?></td>
 								<?php
 								}
 								?>

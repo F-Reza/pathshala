@@ -55,6 +55,10 @@ require 'db/dbcon.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
+							<a class="nav-link" href="course.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Course
+                            </a>
                             <a class="nav-link" href="students.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Students
@@ -75,6 +79,10 @@ require 'db/dbcon.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Revenue MS
                             </a>
+							<a class="nav-link" href="cost.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Others Cost
+                            </a>
                             <a class="nav-link" href="about.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 About Us
@@ -93,7 +101,27 @@ require 'db/dbcon.php';
                         <h1 class="mt-4">Dashboard</h1>
                        
                         <div class="row">
-                            <div class="col-xl-4 col-md-6">
+							<div class="col-xl-3 col-md-6">
+                                <div class="card bg-secondary text-white mb-4">
+                                    <div class="card-body">Total Course </div>
+									<?php							
+										$query = "SELECT * FROM course";
+										$query_run = mysqli_query($con, $query);
+
+										if($total_student = mysqli_num_rows($query_run))
+										{
+											echo'<div class="card-body">'.$total_student.'</div>';
+										} else{
+											echo'<div class="card-body">0</div>';
+										}
+									?>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="course.php">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
                                     <div class="card-body">Total Student </div>
 									<?php							
@@ -113,7 +141,7 @@ require 'db/dbcon.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4 col-md-6">
+                            <div class="col-xl-3 col-md-6">
                                 <div class="card bg-warning text-white mb-4">
                                     <div class="card-body">Total Supervisor</div>
 									<?php							
@@ -133,8 +161,8 @@ require 'db/dbcon.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4 col-md-6">
-                                <div class="card bg-secondary text-white mb-4">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-info text-white mb-4">
                                     <div class="card-body">Total Staff</div>
 									<?php							
 										$query = "SELECT * FROM staff";
@@ -153,7 +181,7 @@ require 'db/dbcon.php';
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-6 col-md-6">
+                            <div class="col-xl-4 col-md-6">
                                 <div class="card bg-success text-white mb-4">
                                     <div class="card-body">Revenue Management</div>
 
@@ -163,12 +191,22 @@ require 'db/dbcon.php';
                                     </div>
                                 </div>
                             </div>
-							<div class="col-xl-6 col-md-6">
+							<div class="col-xl-4 col-md-6">
                                 <div class="card bg-success text-white mb-4">
                                     <div class="card-body">Collect Fee</div>
 
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="payment.php">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+							<div class="col-xl-4 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">Others Cost</div>
+
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="cost.php">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>

@@ -54,6 +54,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
+							<a class="nav-link" href="course.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Course
+                            </a>
                             <a class="nav-link" href="students.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Students
@@ -65,6 +69,18 @@
 							<a class="nav-link" href="staff.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Staff
+                            </a>
+                            <a class="nav-link" href="payment.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Collect Fee
+                            </a>
+							<a class="nav-link" href="revenue.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Revenue MS
+                            </a>
+							<a class="nav-link" href="cost.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Others Cost
                             </a>
                             <a class="nav-link" href="about.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>

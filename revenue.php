@@ -57,6 +57,10 @@ require 'db/dbcon.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
+							<a class="nav-link" href="course.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Course
+                            </a>
                             <a class="nav-link" href="students.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Students
@@ -69,13 +73,17 @@ require 'db/dbcon.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Staff
                             </a>
-							<a class="nav-link" href="payment.php">
+                            <a class="nav-link" href="payment.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Collect Fee
                             </a>
 							<a class="nav-link" href="revenue.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Revenue MS
+                            </a>
+							<a class="nav-link" href="cost.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Others Cost
                             </a>
                             <a class="nav-link" href="about.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -94,51 +102,7 @@ require 'db/dbcon.php';
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Revenue Management</h1>
-                        <!--
-						<div class="row">
-                            <div class="col-xl-2 col-md-6">
-                                <div class="mb-3">
-                                    <label for="">Month</label>
-                                    
-                                    <select name = "month">
-                                    <option value="" selected >None</option>
-                                    <option value="01"  >Janumary</option>
-                                    <option value="02"  >February</option>
-                                    <option value="03"  >March</option>
-                                    <option value="04"  >April</option>
-                                    <option value="05"  >May</option>
-                                    <option value="06"  >June</option>
-                                    <option value="07"  >July</option>
-                                    <option value="08"  >August</option>
-                                    <option value="09"  >September</option>
-                                    <option value="10"  >October</option>
-                                    <option value="11"  >November</option>
-                                    <option value="12"  >December</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-6">
-                                <div class="mb-3">
-                                    <label for="">Year</label>
-                                    
-                                    <select name = "year">
-                                    <option value="" selected >None</option>
-                                    <option value="2022"  >2022</option>
-                                    <option value="2023"  >2023</option>
-                                    <option value="2024"  >2024</option>
-                                    <option value="2025"  >2025</option>
-                                    <option value="2026"  >2026</option>
-                                    <option value="2027"  >2027</option>
-                                    <option value="2028"  >2028</option>
-                                    
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xl-1 col-md-6">
-                                <button class="btn btn-primary" value = "submit">Submit</button>
-                            </div>
-                        </div>
-						-->
+                        
 						<div class="container">
 						<div class="row justify-content-center">
 							<div class="col-md-12">
@@ -190,7 +154,7 @@ require 'db/dbcon.php';
 								{
 									if($amount['SUM(amount)'] <= 0){
 										?>
-										<center><h3> <?php echo 'No data found!'; ?></h3> </center><?php
+										<center><h3> <?php echo 'No data found in this Range!'; ?></h3> </center><?php
 									}else{
 								?>
 								<div class="row">
@@ -223,14 +187,26 @@ require 'db/dbcon.php';
 
 										while($salary1 = mysqli_fetch_array($query_run))
 										{
+										$query = "SELECT SUM(amount) FROM cost";
+										
+                                        $query_run = mysqli_query($con, $query);
+
+										while($expense = mysqli_fetch_array($query_run))
+											{
+											
                                             $sumSalary = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
-										 echo '$'.$sumSalary;
+											
+											$totalExpense = $expense['SUM(amount)'] + $sumSalary;
+											
+											echo '$'.$totalExpense;
+										 
+											}
 										}
                                     }
 									?>
                                     </div>
-									</div>
-								</div>
+                                </div>
+                            </div>
 								
 								<div class="col-xl-4 col-md-6">
                                 <?php
@@ -251,11 +227,18 @@ require 'db/dbcon.php';
 
 												while($salary1 = mysqli_fetch_array($query_run))
 												{
-													$Expense = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
+												$query = "SELECT SUM(amount) FROM cost";
+												$query_run = mysqli_query($con, $query);
+
+													while($expense = mysqli_fetch_array($query_run))
+													{
+														$sumSalary = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
+														$totalExpense = $expense['SUM(amount)'] + $sumSalary;
+													}
 												}
 											}
 											
-											$Revenue = $Earn - $Expense;
+											$Revenue = $Earn - $totalExpense;
 											if($Revenue <=0){
 											?>	
 												<div class="card bg-danger text-white mb-4">
@@ -288,11 +271,17 @@ require 'db/dbcon.php';
 
 												while($salary1 = mysqli_fetch_array($query_run))
 												{
-													$Expense = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
+												$query = "SELECT SUM(amount) FROM cost";
+												$query_run = mysqli_query($con, $query);
+
+													while($expense = mysqli_fetch_array($query_run))
+													{
+														$sumSalary = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
+														$totalExpense = $expense['SUM(amount)'] + $sumSalary;
+													}
 												}
-											}
-											
-											$Revenue = $Earn - $Expense;
+											}	
+											$Revenue = $Earn - $totalExpense;
 										 echo '$'.$Revenue;
 										}
 										
@@ -346,8 +335,20 @@ require 'db/dbcon.php';
 
 										while($salary1 = mysqli_fetch_array($query_run))
 										{
+										$query = "SELECT SUM(amount) FROM cost";
+										
+                                        $query_run = mysqli_query($con, $query);
+
+										while($expense = mysqli_fetch_array($query_run))
+											{
+											
                                             $sumSalary = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
-										 echo '$'.$sumSalary;
+											
+											$totalExpense = $expense['SUM(amount)'] + $sumSalary;
+											
+											echo '$'.$totalExpense;
+										 
+											}
 										}
                                     }
 									?>
@@ -374,11 +375,18 @@ require 'db/dbcon.php';
 
 												while($salary1 = mysqli_fetch_array($query_run))
 												{
-													$Expense = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
+												$query = "SELECT SUM(amount) FROM cost";
+												$query_run = mysqli_query($con, $query);
+
+													while($expense = mysqli_fetch_array($query_run))
+													{
+														$sumSalary = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
+														$totalExpense = $expense['SUM(amount)'] + $sumSalary;
+													}
 												}
 											}
 											
-											$Revenue = $Earn - $Expense;
+											$Revenue = $Earn - $totalExpense;
 											if($Revenue <=0){
 											?>	
 												<div class="card bg-danger text-white mb-4">
@@ -412,11 +420,17 @@ require 'db/dbcon.php';
 
 												while($salary1 = mysqli_fetch_array($query_run))
 												{
-													$Expense = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
+												$query = "SELECT SUM(amount) FROM cost";
+												$query_run = mysqli_query($con, $query);
+
+													while($expense = mysqli_fetch_array($query_run))
+													{
+														$sumSalary = $salary['SUM(salary)'] + $salary1['SUM(salary)'];
+														$totalExpense = $expense['SUM(amount)'] + $sumSalary;
+													}
 												}
-											}
-											
-											$Revenue = $Earn - $Expense;
+											}	
+											$Revenue = $Earn - $totalExpense;
 										 echo '$'.$Revenue;
 										}
 										

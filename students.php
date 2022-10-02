@@ -3,6 +3,11 @@
 
   if (isset($_SESSION['user_id']) && isset($_SESSION['user_username'])) { 
 ?>
+<?php
+    require 'db/db.php';
+    $query = "SELECT * FROM course";
+    $result = mysqli_query($connect, $query);    
+?>
 
 <!doctype html>
 <html lang="en">
@@ -45,20 +50,25 @@
                     <label for="">Phone</label>
                     <input type="text" name="phone" required class="form-control" />
                 </div>
-                <div class="mb-3">
+				<div class="mb-3">
                     <label for="">Select Course</label>
+                    
                     <select name = "course">
                     <option value="" selected >None</option>
-                    <option value="Course-A">Course-A</option>
-                    <option value="Course-B">Course-B</option>
-                    </select>    
+                    <?php while($row = mysqli_fetch_array($result)):;?>
+
+                    <option value="<?php echo $row['course_title'];?>"><?php echo $row['course_title'];?></option>
+
+                     <?php endwhile;?>
+
+                    </select>
                 </div>
 				<div class="mb-3">
                     <label for="">Select Section</label>
                     <select name = "section">
                     <option value="" selected >None</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
+                    <option value="Day">Day</option>
+                    <option value="Evening">Evening</option>
                     </select>	
                 </div>
 				<div class="mb-3">

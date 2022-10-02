@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 26, 2022 at 06:32 PM
+-- Generation Time: Oct 02, 2022 at 10:14 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.26
 
@@ -39,6 +39,32 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`id`, `username`, `password`) VALUES
 (1, 'admin', '$2y$10$ieFWEBgX8f/bHZ1fc6jIpe.O7GWCwhM9u7Z4sEj5w7QqyWqVF9K2a');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cost`
+--
+
+CREATE TABLE `cost` (
+  `c_id` int(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `amount` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `course`
+--
+
+CREATE TABLE `course` (
+  `c_id` int(255) NOT NULL,
+  `course_title` varchar(255) NOT NULL,
+  `course_teacher` varchar(255) NOT NULL,
+  `limit_c` int(255) NOT NULL,
+  `limit_s` int(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -99,7 +125,10 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `name`, `address`, `phone`, `course`, `section`, `total_payment`, `user_name`, `status`, `date_time`) VALUES
-(1, 'Abu Bakar Antor', 'mohommadpur, Dhaka', '0123456789', 'Chamistry', '', '15000', 'antor', '1', '2022-09-13 18:39:07');
+(1, 'Abu Bakar Antor', 'mohommadpur, Dhaka', '0123456789', 'Course-A', 'A', '15000', 'antor', '1', '2022-09-13 18:39:07'),
+(2, 'Arko', 'Mirpur', '0123456789', 'Course-A', 'A', '10000', 'arko', '1', '2022-09-27 16:55:13'),
+(3, 'Rafi', 'Mirpur', '0123456789', 'Course-A', 'A', '5000', 'rafi', '1', '2022-09-27 16:55:41'),
+(4, 'Reza', 'Mirpur', '01830996044', 'Course-A', 'A', '6000', 'reza', '1', '2022-09-27 16:56:57');
 
 -- --------------------------------------------------------
 
@@ -160,7 +189,10 @@ CREATE TABLE `user_std` (
 --
 
 INSERT INTO `user_std` (`std_id`, `user_name`, `password`) VALUES
-(1, 'antor', 'antor');
+(1, 'antor', 'antor'),
+(2, 'arko', 'arko'),
+(3, 'rafi', 'rafi'),
+(4, 'reza', 'reza');
 
 -- --------------------------------------------------------
 
@@ -191,6 +223,20 @@ INSERT INTO `user_stf` (`stf_id`, `user_name`, `password`) VALUES
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indexes for table `cost`
+--
+ALTER TABLE `cost`
+  ADD PRIMARY KEY (`c_id`),
+  ADD UNIQUE KEY `title` (`title`);
+
+--
+-- Indexes for table `course`
+--
+ALTER TABLE `course`
+  ADD PRIMARY KEY (`c_id`),
+  ADD UNIQUE KEY `title` (`course_title`);
 
 --
 -- Indexes for table `payment`
@@ -245,6 +291,18 @@ ALTER TABLE `user_stf`
 --
 
 --
+-- AUTO_INCREMENT for table `cost`
+--
+ALTER TABLE `cost`
+  MODIFY `c_id` int(255) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `course`
+--
+ALTER TABLE `course`
+  MODIFY `c_id` int(255) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
@@ -260,7 +318,7 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `supervisor`
@@ -278,7 +336,7 @@ ALTER TABLE `user_spv`
 -- AUTO_INCREMENT for table `user_std`
 --
 ALTER TABLE `user_std`
-  MODIFY `std_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `std_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_stf`
