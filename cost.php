@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<!-- Add Staff -->
+<!-- Add Cost -->
 <div class="modal fade" id="costAddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -51,7 +51,7 @@
     </div>
 </div>
 
-<!-- Edit Staff Modal -->
+<!-- Edit Cost Modal -->
 <div class="modal fade" id="costEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

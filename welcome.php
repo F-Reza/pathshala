@@ -13,6 +13,10 @@
       <div id="mainBgn"></div>
     </div>
     <div class="col-lg-5 col-md-6 col-xs-12">
+	<h1 class="p- h1 text-center"><i class="fas fa-lock me-2"></i> Welcome Pathshala</h1>
+	<br />
+	<br />
+	<br />
       <div class="p- centerOnMobile" >
         <div class="formContainer">
           <h2 class="p- h4 text-center"><i class="fas fa-lock me-2"></i> Login With</h2>

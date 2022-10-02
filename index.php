@@ -254,6 +254,6 @@ require 'db/dbcon.php';
 
 <?php 
 }else {
-   header("Location: login.php");
+   header("Location: welcome.php");
 }
  ?>
