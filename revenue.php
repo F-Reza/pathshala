@@ -164,7 +164,7 @@ require 'db/dbcon.php';
 										<div class="card-body">Earning</div>
 										<div class="card-footer d-flex align-items-center justify-content-between">
 										<?php 
-										echo '$'.$amount['SUM(amount)'];
+										echo '৳'.$amount['SUM(amount)'];
 										?>
 										</div>
 									</div>
@@ -198,7 +198,7 @@ require 'db/dbcon.php';
 											
 											$totalExpense = $expense['SUM(amount)'] + $sumSalary;
 											
-											echo '$'.$totalExpense;
+											echo '৳'.$totalExpense;
 										 
 											}
 										}
@@ -282,7 +282,7 @@ require 'db/dbcon.php';
 												}
 											}	
 											$Revenue = $Earn - $totalExpense;
-										 echo '$'.$Revenue;
+										 echo '৳'.$Revenue;
 										}
 										
 									?>
@@ -311,7 +311,7 @@ require 'db/dbcon.php';
 
 										while($amount = mysqli_fetch_array($query_run))
 										{
-										 echo '$'.$amount['SUM(amount)'];
+										 echo '৳'.$amount['SUM(amount)'];
 										}
 									?>
                                     </div>
@@ -346,7 +346,7 @@ require 'db/dbcon.php';
 											
 											$totalExpense = $expense['SUM(amount)'] + $sumSalary;
 											
-											echo '$'.$totalExpense;
+											echo '৳'.$totalExpense;
 										 
 											}
 										}
@@ -431,7 +431,7 @@ require 'db/dbcon.php';
 												}
 											}	
 											$Revenue = $Earn - $totalExpense;
-										 echo '$'.$Revenue;
+										 echo '৳'.$Revenue;
 										}
 										
 									?>
